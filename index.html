@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kotimme Tampere</title>
-    <style>
+     <style>
         * {
             margin: 0;
             padding: 0;
@@ -174,7 +174,6 @@
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
         
-        /* Korjattu CSS-lohko, joka oli aiemmin virheellinen */
         .portal-item, .sports-club {
             padding: 1rem;
             margin: 0.5rem 0;
@@ -195,10 +194,12 @@
             display: block;
             margin-bottom: 0.3rem;
         }
-        
-        /* Tämän jälkeen voit jatkaa muiden tyylien kanssa */
 
-        /* Media-kysely mobiilinäkymää varten */
+        .quick-link:hover span {
+            color: white;
+        }
+        
+        /* Media mobiilinäkymää varten */
         @media (max-width: 768px) {
             .nav-menu {
                 display: none;
