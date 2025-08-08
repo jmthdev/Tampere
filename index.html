@@ -4,883 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kotimme Tampere</title>
-   <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.75) 0%, rgba(118, 75, 162, 0.75) 100%),
-                        url('https://rakennustaito.fi/wp-content/uploads/2024/03/RT_muuttohalukkuus_Tampere_Adobe.jpg') center/cover no-repeat fixed;
-            min-height: 100vh;
-            color: #333;
-            position: relative;
-        }
-
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.3) 0%, rgba(118, 75, 162, 0.3) 100%);
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        .navbar {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 1rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 2rem;
-        }
-
-        .logo {
-            font-size: 2rem;
-            font-weight: bold;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .nav-menu {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        .nav-item {
-            position: relative;
-        }
-
-        .nav-link {
-            text-decoration: none;
-            color: #333;
-            font-weight: 500;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .nav-link:hover {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-            transform: translateY(-2px);
-        }
-
-        .dropdown {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            background: white;
-            min-width: 200px;
-            border-radius: 8px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-10px);
-            transition: all 0.3s ease;
-            z-index: 1001;
-        }
-
-        .nav-item:hover .dropdown {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-
-        .dropdown-item {
-            padding: 0.75rem 1rem;
-            color: #333;
-            text-decoration: none;
-            display: block;
-            transition: background 0.3s ease;
-            cursor: pointer;
-        }
-
-        .dropdown-item:hover {
-            background: #f8f9fa;
-            color: #667eea;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        .hero {
-            text-align: center;
-            padding: 4rem 0;
-            color: white;
-        }
-        
-        .section {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            margin: 2rem 0;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            display: none;
-        }
-
-        .section.active {
-            display: block;
-            animation: fadeIn 0.5s ease-in;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .section h2 {
-            color: #667eea;
-            margin-bottom: 1.5rem;
-            font-size: 2rem;
-        }
-
-        .content-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .card {
-            background: linear-gradient(135deg, #f8f9ff 0%, #e8efff 100%);
-            padding: 1.5rem;
-            border-radius: 10px;
-            border-left: 4px solid #667eea;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        
-        .portal-item, .sports-club {
-            padding: 1rem;
-            margin: 0.5rem 0;
-            background: rgba(102, 126, 234, 0.05);
-            border-radius: 8px;
-            border-left: 3px solid #667eea;
-            transition: all 0.3s ease;
-        }
-
-        .portal-item:hover, .sports-club:hover {
-            background: rgba(102, 126, 234, 0.1);
-            transform: translateX(5px);
-        }
-
-        .portal-item strong, .sports-club strong {
-            color: #333;
-            font-size: 1.1rem;
-            display: block;
-            margin-bottom: 0.3rem;
-        }
-        
-        /* Tämän jälkeen voit jatkaa muiden tyylien kanssa */
-
-        /* Media-kysely mobiilinäkymää varten */
-        @media (max-width: 768px) {
-            .nav-menu {
-                display: none;
-            }
-            .mobile-menu {
-                display: flex;
-            }
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-            .content-grid {
-                grid-template-columns: 1fr;
-            }
-            .quick-links-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-    </style>
-</head>
-<body>
-    <section id="asumispalvelut" class="section">
-        <h2>Asumispalvelut</h2>
-        <div class="content-grid">
-            <div class="card">
-                <h3>Suuret Vuokranantajat</h3>
-                <div class="portal-item">
-                    <strong>VTS-kodit</strong>
-                    <small>Yli 17,000 asukasta, Tampereen suosituin vuokranantaja</small>
-                    <a href="https://vts.fi" target="_blank">🌐 vts.fi</a>
-                    <a href="https://vts.fi/loyda-kotisi/" target="_blank">🏠 Asuntohaku</a>
-                </div>
-                </div>
-            </div>
-    </section>
-
-    <section id="sosiaalipalvelut" class="section">
-        <h2>Sosiaalipalvelut</h2>
-        </section>
-    
-    <section id="tyottomat" class="section">
-        <h2>Palvelut Työttömille</h2>
-        </section>
-    
-    <section id="linnainmaa" class="section">
-        <h2>Linnainmaa</h2>
-        </section>
-    
-    <section id="koululaiset" class="section">
-        <h2>Koululaiset</h2>
-        </section>
-
-</body>
-</html>
-.quick-link:hover span {
-            color: white;
-        }        <!-- Asumispalvelut -->
-        <section id="asumispalvelut" class="section">
-            <h2>Asumispalvelut</h2>
-            <div class="content-grid">
-                <div class="card">
-                    <h3>Suuret Vuokranantajat</h3>
-                    <div class="portal-item">
-                        <strong>VTS-kodit</strong>
-                        <small>Yli 17,000 asukasta, Tampereen suosituin vuokranantaja</small>
-                        <a href="https://vts.fi" target="_blank">🌐 vts.fi</a>
-                        <a href="https://vts.fi/loyda-kotisi/" target="_blank">🏠 Asuntohaku</a>
-                    </div>
-                    <div class="portal-item">
-                        <strong>TVA - Tampereen Vuokra-asunnot</strong>
-                        <small>Noin 3,000 vuokra-asuntoa eri puolilla Tampereetta</small>
-                        <a href="https://tampereenvuokra-asunnot.fi" target="_blank">🌐 tampereenvuokra-asunnot.fi</a>
-                        <a href="tel:0356566263">📞 03 565 66263</a>
-                    </div>
-                    <div class="portal-item">
-                        <strong>SATO</strong>
-                        <small>Valtakunnallinen vuokra-asuntoyhtiö</small>
-                        <a href="https://www.sato.fi" target="_blank">🌐 sato.fi</a>
-                        <a href="https://www.sato.fi/vuokra-asunnot/tampere" target="_blank">🏠 Tampere-kohteet</a>
-                    </div>
-                    <div class="portal-item">
-                        <strong>YH Kodit</strong>
-                        <small>Monipuoliset vuokra-asunnot</small>
-                        <a href="https://www.yh.fi" target="_blank">🌐 yh.fi</a>
-                        <a href="https://www.yh.fi/kodit" target="_blank">🏠 Asuntohaku</a>
-                    </div>
-                </div>
-                <div class="card">
-                    <h3>Opiskelija-asunnot</h3>
-                    <div class="portal-item">
-                        <strong>TOAS - Tampereen opiskelija-asuntosäätiö</strong>
-                        <small>Suurin opiskelija-asuntojen tarjoaja</small>
-                        <a href="https://www.toas.fi" target="_blank">🌐 toas.fi</a>
-                        <a href="https://www.toas.fi/fi/asuntohaku" target="_blank">🎓 Opiskelijahaku</a>
-                    </div>
-                    <div class="portal-item">
-                        <strong>POAS - Pirkan opiskelija-asunnot</strong>
-                        <small>Kohtuuhintaisia opiskelija-asuntoja</small>
-                        <a href="https://www.poas.fi" target="_blank">🌐 poas.fi</a>
-                    </div>
-                    <div class="portal-item">
-                        <strong>TASNA - Nuorisoasunnot</strong>
-                        <small>Nuoret ja opiskelijat</small>
-                        <a href="https://www.tasna.fi" target="_blank">🌐 tasna.fi</a>
-                    </div>
-                </div>
-                <div class="card">
-                    <h3>Muut Asumispalvelut</h3>
-                    <div class="portal-item">
-                        <strong>OVV Asuntopalvelut</strong>
-                        <small>Osuuskunta, jäsenille edullisia asuntoja</small>
-                        <a href="https://www.ovv.fi" target="_blank">🌐 ovv.fi</a>
-                    </div>
-                    <div class="portal-item">
-                        <strong>Setlementtiasunnot Oy</strong>
-                        <small>Kohtuuhintaiset vuokra-asunnot</small>
-                        <a href="https://www.setlementtiasunnot.fi" target="_blank">🌐 setlementtiasunnot.fi</a>
-                    </div>
-                    <div class="portal-item">
-                        <strong>TA-Yhtiöt</strong>
-                        <small>Alueellinen asuntoyhtiö</small>
-                        <a href="https://www.ta-yhtiot.fi" target="_blank">🌐 ta-yhtiot.fi</a>
-                    </div>
-                    <div class="portal-item">
-                        <strong>Nuorisosäätiö</strong>
-                        <small>Nuorten asumisen tuki</small>
-                        <a href="https://www.nuorisosaatio.fi" target="_blank">🌐 nuorisosaatio.fi</a>
-                    </div>
-                </div>
-                <div class="card">
-                    <h3>Tuettu ja Erityisasuminen</h3>
-                    <div class="portal-item">
-                        <strong>Mielen ry - Tukiasuminen</strong>
-                        <small>Mielenterveyskuntoutujille Tampere, Pirkkala, Ylöjärvi</small>
-                        <a href="https://mielen.fi" target="_blank">🌐 mielen.fi</a>
-                        <a href="tel:0503510050">📞 050 351 0050</a>
-                    </div>
-                    <div class="portal-item">
-                        <strong>Pirhan erityisryhmien asumispalvelut</strong>
-                        <small>Vammaispalvelut ja ikääntyneet</small>
-                        <a href="https://www.pirha.fi/asumispalvelut" target="_blank">🌐 pirha.fi</a>
-                    </div>
-                    <div class="portal-item">
-                        <strong>Päihdehuollon asumispalvelut</strong>
-                        <small>Kuntoutumisen tuki</small>
-                        <a href="https://www.pirha.fi" target="_blank">🌐 Päihdepalvelut</a>
-                    </div>
-                </div>
-                <div class="card">
-                    <h3>Asumisen neuvonta</h3>
-                    <div class="portal-item">
-                        <strong>Tampereen kaupungin asuntopalvelut</strong>
-                        <small>Asumisen neuvonta ja ohjaus</small>
-                        <a href="https://www.tampere.fi/asuminen" target="_blank">🌐 tampere.fi</a>
-                        <a href="tel:0331565011">📞 03 3156 5011</a>
-                    </div>
-                    <div class="portal-item">
-                        <strong>Vuokralaisten Keskusliitto</strong>
-                        <small>Vuokralaisten oikeusneuvonta</small>
-                        <a href="https://www.vuokralaiset.fi" target="_blank">🌐 vuokralaiset.fi</a>
-                    </div>
-                    <div class="portal-item">
-                        <strong>Kuluttajaneuvonta</strong>
-                        <small>Asumiseen liittyvät oikeudet</small>
-                        <a href="https://www.kkv.fi" target="_blank">🌐 kkv.fi</a>
-                    </div>
-                </div>
-            </div>
-        </section>        <!-- Sosiaalipalvelut -->
-        <section id="sosiaalipalvelut" class="section">
-            <h2>Sosiaalipalvelut</h2>
-            <div class="content-grid">
-                <div class="card">
-                    <h3>PIRHA - Pirkanmaan hyvinvointialue</h3>
-                    <div class="portal-item">
-                        <strong>Aikuissosiaalityö</strong>
-                        <small>Sosiaalinen tuki ja palveluohjaus</small>
-                        <a href="https://www.pirha.fi/sosiaalipalvelut" target="_blank">🌐 pirha.fi</a>
-                        <a href="tel:0356565000">📞 03 565 65000</a>
-                    </div>
-                    <div class="portal-item">
-                        <strong>Työikäisten sosiaalipalvelut</strong>
-                        <small>Kuntoutus ja työllistymisen tuki</small>
-                        <a href="https://www.pirha.fi" target="_blank">🌐 Hakeudutminen</a>
-                    </div>
-                    <div class="portal-item">
-                        <strong>Lastensuojelu</strong>
-                        <small>Lapsi- ja perhepalvelut</small>
-                        <a href="https://www.pirha.fi/lapset-ja-perheet" target="_blank">🌐 Lapsipalvelut</a>
-                    </div>
-                    <div class="portal-item">
-                        <strong>Vammaispalvelut</strong>
-                        <small>Tuki ja avustukset vammaisille</small>
-                        <a href="https://www.pirha.fi/vammaispalvelut" target="_blank">🌐 Vammaispalvelut</a>
-                    </div>
-                </div>
-                <div class="card">
-                    <h3>SARVIS - Satakunnan hyvinvointialue</h3>
-                    <div class="portal-item">
-                        <strong>Sosiaalihuolto</strong>
-                        <small>Satakunnan alue, naapurikuntien asukkaat</small>
-                        <a href="https://www.sarvis.fi" target="_blank">🌐 sarvis.fi</a>
-                        <a href="tel:0440902020">📞 044 090 2020</a>
-                    </div>
-                    <div class="portal-item">
-                        <strong>Perhepalvelut</strong>
-                        <small>Neuvola, lastensuojelu</small>
-                        <a href="https://www.sarvis.fi/perhepalvelut" target="_blank">🌐 Perhepalvelut</a>
-                    </div>
-                </div>
-                <div class="card">
-                    <h3>KELA - Kansaneläkelaitos</h3>
-                    <div class="portal-item">
-                        <strong>Perustoimeentulotuki</strong>
-                        <small>Sähköinen hakemus suositeltava</small>
-                        <a href="https://www.kela.fi" target="_blank">🌐 kela.fi</a>
-                        <a href="tel:020692020">📞 020 692 020</a>
-                    </div>
-                    <div class="portal-item">
-                        <strong>Asumistuki</strong>
-                        <small>Vuokra-asumisen tuki</small>
-                        <a href="https://www.kela.fi/asumistuki" target="_blank">🌐 Asumistuki-haku</a>
-                    </div>
-                    <div class="portal-item">
-                        <strong>Työttömyysturva</strong>
-                        <small>Peruspäiväraha</small>
-                        <a href="https://www.kela.fi/tyottomyysturva" target="_blank">🌐 Työttömyysturva</a>
-                    </div>
-                    <div class="portal-item">
-                        <strong>Kela-toimisto Tampere</strong>
-                        <small>Henkilökohtainen palvelu</small>
-                        <a href="https://www.kela.fi/toimipisteet" target="_blank">🌐 Aukioloajat</a>
-                    </div>
-                </div>
-                <div class="card">
-                    <h3>Tampereen kaupunki</h3>
-                    <div class="portal-item">
-                        <strong>Täydentävä toimeentulotuki</strong>
-                        <small>Kelan jälkeinen lisätuki</small>
-                        <a href="https://www.tampere.fi/sosiaalipalvelut" target="_blank">🌐 tampere.fi</a>
-                        <a href="tel:0331565011">📞 03 3156 5011</a>
-                    </div>
-                    <div class="portal-item">
-                        <strong>Sosiaaliohjaaja</strong>
-                        <small>Neuvonta ja ohjaus</small>
-                        <a href="https://www.tampere.fi" target="_blank">🌐 Ajanvaraus</a>
-                    </div>
-                    <div class="portal-item">
-                        <strong>Ehkäisevä päihdetyö</strong>
-                        <small>A-klinikka ja päihdeneuvonta</small>
-                        <a href="https://www.tampere.fi/paihdepalvelut" target="_blank">🌐 Päihdepalvelut</a>
-                    </div>
-                </div>
-                <div class="card">
-                    <h3>Järjestöt ja Yhdistykset</h3>
-                    <div class="portal-item">
-                        <strong>Setlementtiliitto</strong>
-                        <small>Yhteisölliset palvelut</small>
-                        <a href="https://www.setlementti.fi" target="_blank">🌐 setlementti.fi</a>
-                    </div>
-                    <div class="portal-item">
-                        <strong>SPR Tampere</strong>
-                        <small>Hätäapu ja kriisituki</small>
-                        <a href="https://www.punainenristi.fi" target="_blank">🌐 Punainen Risti</a>
-                    </div>
-                    <div class="portal-item">
-                        <strong>Pelastusarmeija</strong>
-                        <small>Ruoka-apu ja sosiaalinen tuki</small>
-                        <a href="https://www.pelastusarmeija.fi" target="_blank">🌐 pelastusarmeija.fi</a>
-                    </div>
-                </div>
-            </div>
-        </section>        <!-- Työttömät -->
-        <section id="tyottomat" class="section">
-            <h2>Palvelut Työttömille</h2>
-            <div class="content-grid">
-                <div class="card">
-                    <h3>Kuntouttavat Palvelut</h3>
-                    <div class="portal-item">
-                        <strong>Mielen ry - Työpajat</strong>
-                        <small>Mielenterveyskuntoutujille ja pitkäaikaistyöttömille</small>
-                        <a href="https://mielen.fi" target="_blank">🌐 mielen.fi</a>
-                        <a href="tel:0503020590">📞 050 302 0590</a>
-                    </div>
-                    <div class="portal-item">
-                        <strong>Valmentava kuntouttava työtoiminta</strong>
-                        <small>Tamperelaiset ja lähikunnat - Pirhan kautta</small>
-                        <a href="https://mielen.fi/tyollistymista-edistavat-palvelut/" target="_blank">🌐 Työllisyyspalvelut</a>
-                    </div>
-                    <div class="portal-item">
-                        <strong>Sosiaalinen kuntoutus</strong>
-                        <small>Työikäiset, kuntoutustuella tai osatyökykyiset</small>
-                        <a href="https://mielen.fi/sosiaalinen-kuntoutus/" target="_blank">🌐 Hakeutuminen</a>
-                    </div>
-                    <div class="portal-item">
-                        <strong>Nuorten Startti (alle 29v)</strong>
-                        <small>Työtoiminta + yksilöllinen ohjaus, 3-6 viikkoa</small>
-                        <a href="https://mielen.fi" target="_blank">🌐 Tiedot ja haku</a>
-                    </div>
-                </div>
-                <div class="card">
-                    <h3>Työpajat ja Kuntoutuspaikat</h3>
-                    <div class="portal-item">
-                        <strong>Ravintola Kulma</strong>
-                        <small>Ravintola-alan työvalmennus, Sumeliuksenkatu 18A</small>
-                        <a href="https://mielen.fi/tyopajat/" target="_blank">🌐 Työpajat</a>
-                    </div>
-                    <div class="portal-item">
-                        <strong>HYTE-paja</strong>
-                        <small>Hyvinvointi ja terveys, Tammelakeskus</small>
-                        <a href="tel:0503484522">📞 050 348 4522</a>
-                    </div>
-                    <div class="portal-item">
-                        <strong>Luova paja & Ompelupaja</strong>
-                        <small>Käsityöt ja taidekuntoutus</small>
-                        <a href="https://mielen.fi/tyopajat/" target="_blank">🌐 Tutustuminen</a>
-                    </div>
-                    <div class="portal-item">
-                        <strong>Avoin Paja Inspis</strong>
-                        <small>Mielekkään tekemisen keskus, Åkerlundinkatu</small>
-                        <a href="tel:0503510050">📞 050 351 0050</a>
-                    </div>
-                </div>
-                <div class="card">
-                    <h3>Tuki ja Neuvonta</h3>
-                    <div class="portal-item">
-                        <strong>TE-palvelut Tampere</strong>
-                        <small>Työnvälitys ja työttömyysturva</small>
-                        <a href="https://www.te-palvelut.fi" target="_blank">🌐 te-palvelut.fi</a>
-                        <a href="tel:0295020701">📞 029 502 0701</a>
-                    </div>
-                    <div class="portal-item">
-                        <strong>OMA-valmentajat</strong>
-                        <small>Tampereen kaupungin työllisyyspalvelut</small>
-                        <a href="https://www.tampere.fi/tyo-ja-elinkeinot" target="_blank">🌐 tampere.fi</a>
-                    </div>
-                    <div class="portal-item">
-                        <strong>Tammelan lähitori</strong>
-                        <small>Palveluohjausta arjen haasteisiin</small>
-                        <a href="https://mielen.fi" target="_blank">🌐 Neuvonta ja tuki</a>
-                    </div>
-                </div>
-                <div class="card">
-                    <h3>Työkokeilut ja Harjoittelu</h3>
-                    <div class="portal-item">
-                        <strong>Työkokeilut Mielen ry:n pajoilla</strong>
-                        <small>1-6 kuukautta, kaikki pajat</small>
-                        <a href="https://mielen.fi/tyollistymista-edistavat-palvelut/" target="_blank">🌐 Haku ja tiedustelut</a>
-                    </div>
-                    <div class="portal-item">
-                        <strong>Palkkatuki työllistyminen</strong>
-                        <small>Tuki työnantajille ja työnhakijoille</small>
-                        <a href="https://www.te-palvelut.fi" target="_blank">🌐 Palkkatuki-info</a>
-                    </div>
-                </div>
-            </div>
-        </section>        <!-- Linnainmaa -->
-        <section id="linnainmaa" class="section">
-            <h2>Linnainmaa</h2>
-            <div class="content-grid">
-                <div class="card">
-                    <h3>Linnainmaan kehitys</h3>
-                    <div class="news-item">
-                        <div class="date">2025</div>
-                        <div>Linnainmaalla uudistetaan Jussilanreunaa ja Länkiniitynmäkeä</div>
-                    </div>
-                    <div class="news-item">
-                        <div class="date">2025</div>
-                        <div>Hulevesiallas ja tulvaniittyjä ilmastonmuutokseen varautumiseksi</div>
-                    </div>
-                    <div class="news-item">
-                        <div class="date">2024</div>
-                        <div>Linnainmaa noussut Tampereen vetovoimaisimpien alueiden top 10:een</div>
-                    </div>
-                </div>
-                <div class="card">
-                    <h3>Ympäristö ja kehitys</h3>
-                    <ul>
-                        <li>Uusi hulevesiallas tulvasuojelua varten</li>
-                        <li>Luonnon monimuotoisuuden rikastaminen</li>
-                        <li>Itä-Tampereen suosittu alue</li>
-                        <li>Kasvava asuntojen kysyntä</li>
-                    </ul>
-                </div>
-            </div>
-        </section>        <!-- Koululaiset -->
-        <section id="koululaiset" class="section">
-            <h2>Koululaiset</h2>
-            <div class="content-grid">
-                <div class="card">
-                    <h3>📅 Kouluvuoden Aloitus</h3>
-                    <div class="news-item">
-                        <div class="date">6.8.2025</div>
-                        <div><strong>Syyslukukausi alkoi keskiviikkona</strong> - kaikki Tampereen koulut aloittivat uuden lukuvuoden</div>
-                    </div>
-                    <div class="news-item">
-                        <div class="date">7.8.2025</div>
-                        <div>Lukujärjestyksen mukainen opetus alkoi torstaina kaikissa kouluissa</div>
-                    </div>
-                    <div class="news-item">
-                        <div class="date">Luvassa</div>
-                        <div>Syysloma 13.-17.10. • Joululoma 20.12.-6.1. • Talviloma 23.-27.2.2026</div>
-                    </div>
-                </div>
-                <div class="card">
-                    <h3>🏫 Peruskoulu</h3>
-                    <div class="school-list">
-                        <div class="school-item">
-                            <strong>Tesoman peruskoulu</strong>
-                            <a href="https://www.tampere.fi/tesoman-peruskoulu" target="_blank">→ Sivuille</a>
-                        </div>
-                        <div class="school-item">
-                            <strong>Lielahden peruskoulu</strong>
-                            <a href="https://www.tampere.fi/lielahden-peruskoulu" target="_blank">→ Sivuille</a>
-                        </div>
-                        <div class="school-item">
-                            <strong>Kaarilan peruskoulu</strong>
-                            <a href="https://www.tampere.fi/kaarilan-peruskoulu" target="_blank">→ Sivuille</a>
-                        </div>
-                        <div class="school-item">
-                            <strong>Wivi Lönnin koulu</strong>
-                            <a href="https://www.tampere.fi/wivi-lonnin-koulu" target="_blank">→ Sivuille</a>
-                        </div>
-                        <div class="school-item">
-                            <strong>Etelä-Hervannan peruskoulu</strong>
-                            <a href="https://www.tampere.fi/etela-hervannan-peruskoulu" target="_blank">→ Sivuille</a>
-                        </div>
-                        <div class="school-item">
-                            <strong>Ahvenisjärven koulu</strong>
-                            <a href="https://www.tampere.fi/ahvenisjarven-koulu" target="_blank">→ Sivuille</a>
-                        </div>
-                        <div class="school-item">
-                            <strong>Kaukajärven koulu</strong>
-                            <a href="https://www.tampere.fi/kaukajarven-koulu" target="_blank">→ Sivuille</a>
-                        </div>
-                        <div class="school-item">
-                            <strong>Kämmenniemen koulu</strong>
-                            <a href="https://www.tampere.fi/kammenniemen-koulu" target="_blank">→ Sivuille</a>
-                        </div>
-                        <div class="school-item">
-                            <strong>Linnainmaan koulu</strong>
-                            <a href="https://www.tampere.fi/linnainmaan-koulu" target="_blank">→ Sivuille</a>
-                        </div>
-                        <div class="school-item">
-                            <strong>FISTA - Kansainvälinen koulu</strong>
-                            <a href="https://www.tampere.fi/fista" target="_blank">→ Sivuille</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="card">
-                    <h3>🎓 Lukiot</h3>
-                    <div class="school-list">
-                        <div class="school-item">
-                            <strong>Sammon keskuslukio</strong>
-                            <small>Urheilu- ja viestintälinja</small>
-                            <a href="https://www.tampere.fi/sammon-keskuslukio" target="_blank">→ Sivuille</a>
-                        </div>
-                        <div class="school-item">
-                            <strong>Tampereen lyseon lukio</strong>
-                            <small>IB-linja, kansainvälisyys</small>
-                            <a href="https://www.tampere.fi/lyseon-lukio" target="_blank">→ Sivuille</a>
-                        </div>
-                        <div class="school-item">
-                            <strong>Tammerkosken lukio</strong>
-                            <small>Kuvataide ja käsityö</small>
-                            <a href="https://www.tampere.fi/tammerkosken-lukio" target="_blank">→ Sivuille</a>
-                        </div>
-                        <div class="school-item">
-                            <strong>Tampereen klassillinen lukio</strong>
-                            <small>Luonnontieteet</small>
-                            <a href="https://www.tampere.fi/klassillinen-lukio" target="_blank">→ Sivuille</a>
-                        </div>
-                        <div class="school-item">
-                            <strong>Tampereen teknillinen lukio</strong>
-                            <small>Tekniikka ja matematiikka</small>
-                            <a href="https://www.tampere.fi/teknillinen-lukio" target="_blank">→ Sivuille</a>
-                        </div>
-                        <div class="school-item">
-                            <strong>Hatanpään lukio</strong>
-                            <small>Musiikki ja musiikkiteatteri</small>
-                            <a href="https://www.tampere.fi/hatanpaan-lukio" target="_blank">→ Sivuille</a>
-                        </div>
-                        <div class="school-item">
-                            <strong>Kalevan lukio</strong>
-                            <small>Musiikki</small>
-                            <a href="https://www.tampere.fi/kalevan-lukio" target="_blank">→ Sivuille</a>
-                        </div>
-                        <div class="school-item">
-                            <strong>Tampereen yhteiskoulun lukio</strong>
-                            <small>Ilmaisutaidot</small>
-                            <a href="https://www.tampereenyhteikoulu.fi" target="_blank">→ Sivuille</a>
-                        </div>
-                        <div class="school-item">
-                            <strong>Normaalikoulu</strong>
-                            <small>Yliopiston harjoittelukoulu</small>
-                            <a href="https://www.tuni.fi/norssi" target="_blank">→ Sivuille</a>
-                        </div>
-                        <div class="school-item">
-                            <strong>Tampereen aikuislukio</strong>
-                            <small>Ilta- ja verkko-opinnot</small>
-                            <a href="https://www.tampere.fi/aikuislukio" target="_blank">→ Sivuille</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="card">
-                    <h3>🔧 Ammattioppilaitokset</h3>
-                    <div class="school-list">
-                        <div class="school-item">
-                            <strong>Tredu - Tampereen seudun ammattiopisto</strong>
-                            <small>Laaja ammatillinen koulutus</small>
-                            <a href="https://www.tredu.fi" target="_blank">→ Sivuille</a>
-                        </div>
-                        <div class="school-item">
-                            <strong>SASKY - Palvelualan ammattiopisto</strong>
-                            <small>Palvelualat ja ravintola-ala</small>
-                            <a href="https://sasky.fi/tampereen-palvelualan-ammattiopisto" target="_blank">→ Sivuille</a>
-                        </div>
-                        <div class="school-item">
-                            <strong>AhlmanEdu</strong>
-                            <small>Pelialat ja maaseutu</small>
-                            <a href="https://www.ahlman.fi" target="_blank">→ Sivuille</a>
-                        </div>
-                        <div class="school-item">
-                            <strong>Kaksoistutkinto</strong>
-                            <small>Lukio + ammattitutkinto</small>
-                            <a href="https://www.tredu.fi/hakijalle/koulutustarjonta/kaksoistutkinto/" target="_blank">→ Sivuille</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="card">
-                    <h3>📚 Ajankohtaiset Koulukuulumiset</h3>
-                    <div class="news-item">
-                        <div class="date">2025</div>
-                        <div>Ahvenisjärven koulun oppilaat toimivat väistötiloissa uuden koulun rakentamisen aikana</div>
-                    </div>
-                    <div class="news-item">
-                        <div class="date">Syksy 2025</div>
-                        <div>Sammon keskuslukion MUSIKAALI toteutetaan jälleen syksyllä</div>
-                    </div>
-                    <div class="news-item">
-                        <div class="date">17.1.2026</div>
-                        <div>Sammon keskuslukion avoimet ovet - 9-luokkalaiset tutustumaan!</div>
-                    </div>
-                    <div class="news-item">
-                        <div class="date">2025-2026</div>
-                        <div>Oppivelvollisuus koskee vuonna 2021 tai sen jälkeen peruskoulun päättäneitä</div>
-                    </div>
-                </div>
-                <div class="card">
-                    <h3>🏫 Kouluterveydenhuolto</h3>
-                    <div class="news-item">
-                        <div class="date">Info</div>
-                        <div>Kaikilla kouluilla on pääsy kouluterveydenhuoltoon</div>
-                    </div>
-                    <div class="news-item">
-                        <div class="date">Alle 18v</div>
-                        <div>Ilmaiset hammashoidon palvelut Pirhan kautta</div>
-                    </div>
-                    <div class="news-item">
-                        <div class="date">Oppivelvolliset</div>
-                        <div>Maksuttomat kannettavat tietokoneet lainaan opiskeluajaksi</div>
-                    </div>
-                </div>
-            </div>
-        </section><!DOCTYPE html>
-<html lang="fi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kotimme Tampere</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-        .portal-item, .sports-club {
-            padding: 1rem;
-            margin: 0.5rem 0;
-            background: rgba(102, 126, 234, 0.05);
-            border-radius: 8px;
-            border-left: 3px solid #667eea;
-            transition: all 0.3s ease;
-        }
-
-        .portal-item:hover, .sports-club:hover {
-            background: rgba(102, 126, 234, 0.1);
-            transform: translateX(5px);
-        }
-
-        .portal-item strong, .sports-club strong {
-            color: #333;
-            font-size: 1.1rem;
-            display: block;
-            margin-bottom: 0.3rem;
-        }
-
-        .portal-item a, .sports-club a {
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 500;
-            display: block;
-            margin-bottom: 0.3rem;
-        }
-
-        .portal-item a:hover, .sports-club a:hover {
-            color: #764ba2;
-            text-decoration: underline;
-        }
-
-        .portal-item small, .sports-club small {
-            color: #666;
-            font-size: 0.9rem;
-            font-style: italic;
-        }
-
-        .school-list {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .school-item {
-            padding: 0.8rem;
-            background: rgba(102, 126, 234, 0.05);
-            border-radius: 6px;
-            border-left: 3px solid #667eea;
-            transition: all 0.3s ease;
-        }
-
-        .school-item:hover {
-            background: rgba(102, 126, 234, 0.1);
-            transform: translateX(5px);
-        }
-
-        .school-item strong {
-            color: #333;
-            display: block;
-            margin-bottom: 0.2rem;
-        }
-
-        .school-item small {
-            color: #666;
-            font-size: 0.8rem;
-            font-style: italic;
-            display: block;
-            margin-bottom: 0.3rem;
-        }
-
-        .school-item a {
-            color: #667eea;
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 500;
-        }
-
-        .school-item a:hover {
-            color: #764ba2;
-            text-decoration: underline;
-        }
-            .nav-menu {
-                display: none;
-            }
-            
-            .mobile-menu {
-                display: flex;
-            }
-            
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-            
-            .content-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .quick-links-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
         }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: 
-                url('./images/tampere.jpg') center/cover no-repeat fixed;
+            background: url('./images/tampere.jpg') center/cover no-repeat fixed;
             min-height: 100vh;
             color: #333;
             position: relative;
@@ -1009,9 +142,9 @@
         }
 
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
+            max-width: 100%;
+            margin: 0;
+            padding: 0;
         }
 
         .hero {
@@ -1020,12 +153,37 @@
             color: white;
         }
 
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 900;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8), 
+                         -1px -1px 2px rgba(0, 0, 0, 0.5),
+                         2px -2px 4px rgba(0, 0, 0, 0.6);
+            letter-spacing: 2px;
+            text-stroke: 2px rgba(0, 0, 0, 0.3);
+            -webkit-text-stroke: 1px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: #000;
+            font-weight: 600;
+            text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.8);
+        }
+
         .main-content {
             display: grid;
             grid-template-columns: 200px 1fr 200px;
             gap: 1.5rem;
-            max-width: 1400px;
-            margin: 0 auto;
+            max-width: 100%;
+            margin: 0;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
 
         .sidebar {
@@ -1059,98 +217,6 @@
             max-width: 800px;
         }
 
-        .newspapers {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 0.8rem;
-            margin-top: 3rem;
-            max-width: 1200px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .newspaper-card {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(10px);
-            padding: 0.8rem;
-            border-radius: 10px;
-            text-align: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            border-top: 3px solid #667eea;
-            cursor: pointer;
-            min-height: 120px;
-        }
-
-        .newspaper-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.2);
-            background: rgba(255, 255, 255, 0.95);
-        }
-
-        .newspaper-logo {
-            width: 40px;
-            height: 40px;
-            margin: 0 auto 0.3rem auto;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            color: white;
-            font-weight: bold;
-        }
-
-        .newspaper-name {
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 0.2rem;
-            font-size: 0.85rem;
-        }
-
-        .newspaper-desc {
-            font-size: 0.7rem;
-            color: #666;
-            margin-bottom: 0.6rem;
-        }
-
-        .newspaper-link {
-            display: inline-block;
-            padding: 0.3rem 0.8rem;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-            text-decoration: none;
-            border-radius: 15px;
-            font-size: 0.7rem;
-            transition: all 0.3s ease;
-        }
-
-        .newspaper-link:hover {
-            transform: scale(1.05);
-            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
-        }
-
-        .hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            font-weight: 900;
-            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8), 
-                         -1px -1px 2px rgba(0, 0, 0, 0.5),
-                         2px -2px 4px rgba(0, 0, 0, 0.6);
-            letter-spacing: 2px;
-            text-stroke: 2px rgba(0, 0, 0, 0.3);
-            -webkit-text-stroke: 1px rgba(0, 0, 0, 0.2);
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            color: #000;
-            font-weight: 600;
-            text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.8);
-        }
-
         .section {
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(10px);
@@ -1159,6 +225,8 @@
             border-radius: 15px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
             display: none;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .section.active {
@@ -1235,20 +303,6 @@
             margin-bottom: 0.5rem;
         }
 
-        .mobile-menu {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-        }
-
-        .mobile-menu span {
-            width: 25px;
-            height: 3px;
-            background: #333;
-            margin: 3px 0;
-            transition: 0.3s;
-        }
-
         .quick-links {
             margin-top: 2rem;
         }
@@ -1313,13 +367,6 @@
             box-shadow: 0 6px 15px rgba(255, 255, 255, 0.3);
         }
 
-        .quick-link span {
-            font-weight: 600;
-            font-size: 0.95rem;
-            color: #333;
-            transition: color 0.3s ease;
-        }
-
         .quick-link-marker.sports-triangle {
             position: relative;
             font-size: 1rem;
@@ -1366,6 +413,434 @@
         .quick-link:hover .sport-icon.bottom-right {
             transform: scale(1.1) rotate(-5deg);
         }
+
+        .quick-link span {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #333;
+            transition: color 0.3s ease;
+        }
+
+        .quick-link:hover span {
+            color: white;
+        }
+
+        .newspapers {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 0.8rem;
+            margin-top: 3rem;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .newspaper-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 0.8rem;
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border-top: 3px solid #667eea;
+            cursor: pointer;
+            min-height: 120px;
+        }
+
+        .newspaper-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.2);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .newspaper-logo {
+            width: 40px;
+            height: 40px;
+            margin: 0 auto 0.3rem auto;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+            font-weight: bold;
+        }
+
+        .newspaper-name {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 0.2rem;
+            font-size: 0.85rem;
+        }
+
+        .newspaper-desc {
+            font-size: 0.7rem;
+            color: #666;
+            margin-bottom: 0.6rem;
+        }
+
+        .newspaper-link {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            text-decoration: none;
+            border-radius: 15px;
+            font-size: 0.7rem;
+            transition: all 0.3s ease;
+        }
+
+        .newspaper-link:hover {
+            transform: scale(1.05);
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .portal-item, .sports-club {
+            padding: 1rem;
+            margin: 0.5rem 0;
+            background: rgba(102, 126, 234, 0.05);
+            border-radius: 8px;
+            border-left: 3px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .portal-item:hover, .sports-club:hover {
+            background: rgba(102, 126, 234, 0.1);
+            transform: translateX(5px);
+        }
+
+        .portal-item strong, .sports-club strong {
+            color: #333;
+            font-size: 1.1rem;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        .portal-item a, .sports-club a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        .portal-item a:hover, .sports-club a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+
+        .portal-item small, .sports-club small {
+            color: #666;
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+
+        .job-portal, .sports-categories {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .school-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .school-item {
+            padding: 0.8rem;
+            background: rgba(102, 126, 234, 0.05);
+            border-radius: 6px;
+            border-left: 3px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .school-item:hover {
+            background: rgba(102, 126, 234, 0.1);
+            transform: translateX(5px);
+        }
+
+        .school-item strong {
+            color: #333;
+            display: block;
+            margin-bottom: 0.2rem;
+        }
+
+        .school-item small {
+            color: #666;
+            font-size: 0.8rem;
+            font-style: italic;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        .school-item a {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .school-item a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+
+        .mobile-menu {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .mobile-menu span {
+            width: 25px;
+            height: 3px;
+            background: #333;
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+            
+            .mobile-menu {
+                display: flex;
+            }
+            
+            .nav-container {
+                padding: 0 1rem;
+            }
+            
+            .logo {
+                font-size: 1.5rem;
+            }
+            
+            .hero {
+                padding: 2rem 1rem 1rem 1rem;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+                line-height: 1.2;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+                margin-bottom: 1rem;
+            }
+            
+            .container {
+                padding: 1rem;
+                max-width: 100%;
+            }
+            
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .card {
+                padding: 1rem;
+                margin: 0.5rem 0;
+            }
+            
+            .card h3 {
+                font-size: 1.1rem;
+            }
+
+            .quick-links-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.8rem;
+            }
+            
+            .quick-link {
+                padding: 0.8rem;
+                gap: 0.4rem;
+            }
+            
+            .quick-link-marker {
+                width: 40px;
+                height: 40px;
+                font-size: 1.4rem;
+            }
+            
+            .quick-link span {
+                font-size: 0.85rem;
+            }
+
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                margin: 1rem;
+                max-width: calc(100% - 2rem);
+                padding: 1rem;
+            }
+
+            .sidebar {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 0.8rem;
+                flex-direction: row;
+            }
+            
+            .ad-space {
+                min-height: 120px;
+                padding: 0.8rem;
+                font-size: 0.8rem;
+            }
+            
+            .ad-space h4 {
+                font-size: 0.9rem;
+            }
+
+            .newspapers {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.6rem;
+                margin-top: 2rem;
+            }
+            
+            .newspaper-card {
+                padding: 0.6rem;
+                min-height: 100px;
+            }
+            
+            .newspaper-logo {
+                width: 30px;
+                height: 30px;
+                font-size: 1rem;
+            }
+            
+            .newspaper-name {
+                font-size: 0.75rem;
+            }
+            
+            .newspaper-desc {
+                font-size: 0.65rem;
+            }
+            
+            .newspaper-link {
+                padding: 0.25rem 0.6rem;
+                font-size: 0.65rem;
+            }
+            
+            .section {
+                margin: 1rem;
+                padding: 1rem;
+                border-radius: 10px;
+                width: calc(100% - 2rem);
+                max-width: calc(100% - 2rem);
+            }
+            
+            .section h2 {
+                font-size: 1.5rem;
+                margin-bottom: 1rem;
+            }
+            
+            .portal-item, .sports-club, .school-item {
+                padding: 0.8rem;
+                margin: 0.4rem 0;
+            }
+            
+            .portal-item strong, .sports-club strong, .school-item strong {
+                font-size: 1rem;
+            }
+            
+            .portal-item small, .sports-club small, .school-item small {
+                font-size: 0.8rem;
+            }
+            
+            .portal-item a, .sports-club a, .school-item a {
+                font-size: 0.8rem;
+            }
+            
+            .news-item {
+                padding: 0.8rem;
+                margin: 0.4rem 0;
+            }
+            
+            .date {
+                font-size: 0.8rem;
+            }
+            
+            .dropdown {
+                min-width: 180px;
+                max-height: 300px;
+            }
+            
+            .dropdown-item {
+                padding: 0.6rem 0.8rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo {
+                font-size: 1.2rem;
+            }
+            
+            .hero {
+                padding: 1rem 0.5rem;
+            }
+            
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            
+            .hero p {
+                font-size: 0.9rem;
+            }
+            
+            .quick-links-grid {
+                grid-template-columns: 1fr;
+                gap: 0.6rem;
+            }
+            
+            .newspapers {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                grid-template-columns: 1fr;
+            }
+            
+            .main-content {
+                grid-template-columns: 1fr;
+                margin: 0.5rem;
+                max-width: calc(100% - 1rem);
+                padding: 0.8rem;
+            }
+            
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 0.8rem;
+            }
+            
+            .card {
+                padding: 0.8rem;
+            }
+            
+            .section {
+                padding: 0.8rem;
+                margin: 0.5rem;
+                width: calc(100% - 1rem);
+                max-width: calc(100% - 1rem);
+            }
+            
+            .container {
+                padding: 0.5rem;
+                max-width: 100%;
+            }
+            
+            .nav-container {
+                padding: 0 0.5rem;
+            }
+        }
+    </style>
+</head>
     </style>
 </head>
 <body>
@@ -1538,6 +1013,7 @@
                     <div class="newspaper-desc">Hervanta-lehti</div>
                     <a href="https://www.hervannansanomat.fi" target="_blank" class="newspaper-link">Lue lehteä</a>
                 </div>
+
                 <div class="newspaper-card" onclick="window.open('https://www.kangasalansanomat.fi', '_blank')">
                     <div class="newspaper-logo">KS</div>
                     <div class="newspaper-name">Kangasalan Sanomat</div>
