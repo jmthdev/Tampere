@@ -8,8 +8,8 @@
 - **Ajankohtaiset uutiset ja tapahtumat**: pysy ajan tasalla Tampereen tapahtumista.
 - **Pikavalinnat**: nopea pääsy tärkeimpiin palveluihin.
 - **Responsiivinen käyttöliittymä**: optimaalinen käyttökokemus kaikilla laitteilla.
-  - Mobiililaitteilla käytössä on kätevä **hamburger-menu**.
-  - Työpöytäkäytössä navigointia helpottavat **hover-valikot**.
+  - Mobiililaitteilla käytössä on kätevä hamburger-menu.
+  - Työpöytäkäytössä navigointia helpottavat hover-valikot.
 - **Paikallislehtien linkit**: suora pääsy Tampereen paikallisuutisiin.
 
 ---
@@ -24,8 +24,8 @@
 - **Current News and Events**: stay up-to-date with happenings in Tampere.
 - **Quick Links**: fast access to essential services.
 - **Responsive UI**: an optimal user experience on all devices.
-  - A convenient **hamburger menu** is used on mobile.
-  - **Hover menus** make desktop navigation easy.
+  - A convenient hamburger menu is used on mobile.
+  - Hover menus make desktop navigation easy.
 - **Local Newspaper Links**: direct access to local news sources.
 
 https://bright-dieffenbachia-af09e5.netlify.app/
