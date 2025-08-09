@@ -1337,6 +1337,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const mobileMenu = document.querySelector('.mobile-menu');
     const navMenu = document.querySelector('.nav-menu');
     const navItems = document.querySelectorAll('.nav-item');
+    const logo = document.querySelector('.logo');
 
     mobileMenu.addEventListener('click', () => {
         navMenu.classList.toggle('active');
@@ -1354,6 +1355,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
         }
+    });
+
+    // Klikkaus logoa ja sulkee mobiilimenun + dropdownit + sekä palauttaa sivun alkuun
+    logo.addEventListener('click', () => {
+        navMenu.classList.remove('active');
+        document.querySelectorAll('.dropdown.active').forEach(dd => dd.classList.remove('active'));
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 });
 </script>
