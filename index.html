@@ -1331,5 +1331,32 @@
             }
         });
     </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const mobileMenu = document.querySelector('.mobile-menu');
+    const navMenu = document.querySelector('.nav-menu');
+    const navItems = document.querySelectorAll('.nav-item');
+
+    mobileMenu.addEventListener('click', () => {
+        navMenu.classList.toggle('active');
+    });
+
+    // Toggle dropdowns in mobile view
+    navItems.forEach(item => {
+        const dropdown = item.querySelector('.dropdown');
+        const link = item.querySelector('.nav-link');
+        if (dropdown && link) {
+            link.addEventListener('click', (e) => {
+                if (window.innerWidth <= 768) {
+                    e.preventDefault();
+                    dropdown.classList.toggle('active');
+                }
+            });
+        }
+    });
+});
+</script>
+
 </body>
 </html>
