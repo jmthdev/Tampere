@@ -28,4 +28,3 @@
   - Hover menus make desktop navigation easy.
 - **Local Newspaper Links**: direct access to local news sources.
 
-https://bright-dieffenbachia-af09e5.netlify.app/
