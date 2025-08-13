@@ -4,43 +4,54 @@ const cors = require("cors");
 
 const app = express();
 app.use(cors());
+app.use(express.json());
 
-// 🔹 MongoDB yhteys
-const username = "jiihoo86";
-const password = "nEftGs4HGl5HUbvh";
-const cluster = "cluster0.mongodb.net";
-const dbname = "visitorDB";
-
-const uri = `mongodb+srv://${username}:${password}@${cluster}/${dbname}?retryWrites=true&w=majority`;
-
-mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+// Yhdistä MongoDB:hen
+mongoose
+  .connect(process.env.MONGODB_URI || "mongodb://localhost:27017/visitorDB", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => console.log("✅ Yhdistetty MongoDB:hen"))
-  .catch(err => console.error("❌ MongoDB-yhteysvirhe:", err));
+  .catch((err) => console.error("❌ MongoDB virhe:", err));
 
-// 🔹 Mongoose-malli
-const VisitorSchema = new mongoose.Schema({
-  count: { type: Number, default: 0 }
+// Luodaan schema ja malli
+const visitorSchema = new mongoose.Schema({
+  count: { type: Number, default: 0 },
 });
-const Visitor = mongoose.model("Visitor", VisitorSchema);
 
-// 🔹 API-reitti vierailijoiden hakemiseen ja kasvattamiseen
+const Visitor = mongoose.model("Visitor", visitorSchema);
+
+// API: hae kävijämäärä
 app.get("/api/visitors", async (req, res) => {
   try {
-    let visitors = await Visitor.findOne();
-    if (!visitors) {
-      visitors = new Visitor({ count: 1 });
-      await visitors.save();
-    } else {
-      visitors.count += 1;
-      await visitors.save();
+    let visitor = await Visitor.findOne();
+    if (!visitor) {
+      visitor = new Visitor({ count: 0 });
+      await visitor.save();
     }
-    res.json({ count: visitors.count });
+    res.json({ count: visitor.count });
   } catch (err) {
-    console.error(err);
     res.status(500).json({ error: "Server error" });
   }
 });
 
-// 🔹 Portti (Vercel käyttää automaattisesti)
+// API: lisää kävijä
+app.post("/api/visitors", async (req, res) => {
+  try {
+    let visitor = await Visitor.findOne();
+    if (!visitor) {
+      visitor = new Visitor({ count: 1 });
+    } else {
+      visitor.count += 1;
+    }
+    await visitor.save();
+    res.json({ count: visitor.count });
+  } catch (err) {
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+// Käynnistä serveri lokaalisti
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => console.log(`🚀 Serveri käynnissä portissa ${PORT}`));
