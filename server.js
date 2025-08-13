@@ -1,3 +1,4 @@
+// server.js
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -6,16 +7,16 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Yhdistä MongoDB:hen
+// MongoDB Atlas -yhteys
 mongoose
-  .connect(process.env.MONGODB_URI || "mongodb://localhost:27017/visitorDB", {
+  .connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .then(() => console.log("✅ Yhdistetty MongoDB:hen"))
-  .catch((err) => console.error("❌ MongoDB virhe:", err));
+  .then(() => console.log("✅ Yhteys Atlas MongoDB:hen ok"))
+  .catch((err) => console.error("❌ MongoDB-virhe:", err));
 
-// Luodaan schema ja malli
+// Schema ja malli
 const visitorSchema = new mongoose.Schema({
   count: { type: Number, default: 0 },
 });
@@ -52,5 +53,8 @@ app.post("/api/visitors", async (req, res) => {
   }
 });
 
-// Tämä tarvitaan Vercelille
+// Perusreitti pääsivulle
+app.get("/", (req, res) => res.send("Server running 🚀"));
+
+// Export Vercelille
 module.exports = app;
