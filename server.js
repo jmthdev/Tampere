@@ -52,6 +52,5 @@ app.post("/api/visitors", async (req, res) => {
   }
 });
 
-// Käynnistä serveri lokaalisti
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => console.log(`🚀 Serveri käynnissä portissa ${PORT}`));
+// Tämä tarvitaan Vercelille
+module.exports = app;
