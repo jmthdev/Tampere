@@ -1,60 +1,50 @@
-// server.js
-const express = require("express");
-const mongoose = require("mongoose");
-const cors = require("cors");
+const express = require('express');
+const path = require('path');
+const http = require('http');
+const { Server } = require('socket.io');
+const mongoose = require('mongoose');
+
+require('dotenv').config(); // Vercelissä voit asettaa environment variables
 
 const app = express();
-app.use(cors());
-app.use(express.json());
+const server = http.createServer(app);
+const io = new Server(server);
 
-// MongoDB Atlas -yhteys
-mongoose
-  .connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => console.log("✅ Yhteys Atlas MongoDB:hen ok"))
-  .catch((err) => console.error("❌ MongoDB-virhe:", err));
+// MongoDB yhteys
+const mongoUri = process.env.MONGO_URI; // Lisää Vercel dashboardissa
+mongoose.connect(mongoUri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
+.then(() => console.log('MongoDB connected'))
+.catch(err => console.error('MongoDB connection error:', err));
 
-// Schema ja malli
-const visitorSchema = new mongoose.Schema({
-  count: { type: Number, default: 0 },
-});
+// Staattisten tiedostojen tarjoaminen
+app.use(express.static(path.join(__dirname, 'public')));
 
-const Visitor = mongoose.model("Visitor", visitorSchema);
-
-// API: hae kävijämäärä
-app.get("/api/visitors", async (req, res) => {
+// Esimerkkireitti tietokantaan
+app.get('/users', async (req, res) => {
   try {
-    let visitor = await Visitor.findOne();
-    if (!visitor) {
-      visitor = new Visitor({ count: 0 });
-      await visitor.save();
-    }
-    res.json({ count: visitor.count });
+    const users = await mongoose.connection.db.collection('users').find().toArray();
+    res.json(users);
   } catch (err) {
-    res.status(500).json({ error: "Server error" });
+    res.status(500).json({ error: err.message });
   }
 });
 
-// API: lisää kävijä
-app.post("/api/visitors", async (req, res) => {
-  try {
-    let visitor = await Visitor.findOne();
-    if (!visitor) {
-      visitor = new Visitor({ count: 1 });
-    } else {
-      visitor.count += 1;
-    }
-    await visitor.save();
-    res.json({ count: visitor.count });
-  } catch (err) {
-    res.status(500).json({ error: "Server error" });
-  }
+// Kaikki muut pyynnöt palauttavat index.html
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Perusreitti pääsivulle
-app.get("/", (req, res) => res.send("Server running 🚀"));
+// Socket.io
+io.on('connection', (socket) => {
+  console.log('User connected');
 
-// Export Vercelille
-module.exports = app;
+  socket.on('disconnect', () => {
+    console.log('User disconnected');
+  });
+});
+
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
