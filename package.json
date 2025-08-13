@@ -1,23 +1,17 @@
 {
   "name": "kotimme-tampere",
   "version": "1.0.0",
-  "description": "**Kotimme Tampere** on responsiivinen verkkosivusto, joka kokoaa kaikki Tampereen alueen palvelut ja tiedot yhteen paikkaan. Sivusto tarjoaa käyttäjäystävällisen tavan löytää ajankohtaisia tapahtumia, palveluita ja paikallisia uutisia, toimien saumattomasti sekä tietokoneella että mobiililaitteilla.",
-  "main": "server.js",
+  "description": "Kotimme Tampere - Tampereen palvelut yhdessä paikassa",
   "scripts": {
-    "start": "node server.js",
-    "dev": "lite-server"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "devDependencies": {
-    "live-server": "^1.2.0",
-    "lite-server": "^2.6.1"
+    "dev": "npx serve public -p 3000",
+    "start": "vercel dev",
+    "deploy": "vercel --prod"
   },
   "dependencies": {
-    "dotenv": "^16.0.0",
-    "express": "^4.18.0",
-    "mongoose": "^7.0.0"
-   }
+    "mongodb": "^5.0.0"
+  },
+  "devDependencies": {
+    "vercel": "^32.0.0",
+    "serve": "^14.0.0"
   }
+}
