@@ -5,8 +5,8 @@
   "scripts": {
     "dev": "netlify dev",
     "serve": "npx serve public -p 3000",
-    "build": "echo 'No build needed'",
-    "deploy": "netlify deploy --prod"
+    "deploy": "netlify deploy --prod",
+    "build": "mkdir -p public && cp -r src/* public/"
   },
   "dependencies": {
     "mongodb": "^5.0.0"
