@@ -1,7 +1,7 @@
 class VisitorTracker {
     constructor() {
         this.sessionId = this.getOrCreateSessionId();
-        this.apiUrl = '/visitors';
+        this.apiUrl = '/api/visitors';
         this.retryCount = 0;
         this.maxRetries = 3;
         this.init();
