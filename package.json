@@ -6,10 +6,11 @@
     "dev": "netlify dev",
     "serve": "npx serve public -p 3000",
     "deploy": "netlify deploy --prod",
-    "build": "echo 'Build completed, files are in public folder.'"
+    "build": "mkdir -p public && cp -r node_modules/socket.io-client/dist/socket.io.js public/ && cp -r index.html styles.css public/"
   },
   "dependencies": {
-    "mongodb": "^5.0.0"
+    "mongodb": "^5.0.0",
+    "socket.io-client": "^4.8.1"
   },
   "devDependencies": {
     "@netlify/functions": "^2.0.0",
