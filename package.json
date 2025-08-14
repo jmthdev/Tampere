@@ -9,7 +9,7 @@
     "build": "mkdir -p public && cp node_modules/socket.io-client/dist/socket.io.js public/"
   },
   "dependencies": {
-    "mongodb": "^5.0.0",
+    "mongodb": "^5.9.2",
     "socket.io-client": "^4.8.1"
   },
   "devDependencies": {
