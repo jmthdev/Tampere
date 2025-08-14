@@ -1,10 +1,7 @@
-// Kävijälaskuri Netlifyn kanssa
-// Kävijälaskuri Netlifyn kanssa - KORJATTU
 class VisitorTracker {
     constructor() {
         this.sessionId = this.getOrCreateSessionId();
-        // KORJATTU POLKU NETLIFYLLE
-        this.apiUrl = '/.netlify/functions/visitors';
+        this.apiUrl = '/api/visitors';
         this.retryCount = 0;
         this.maxRetries = 3;
         this.init();
