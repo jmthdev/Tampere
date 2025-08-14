@@ -1,7 +1,7 @@
 class VisitorTracker {
     constructor() {
         this.sessionId = this.getOrCreateSessionId();
-        this.apiUrl = '/api/visitors';
+        this.apiUrl = '/visitors';
         this.retryCount = 0;
         this.maxRetries = 3;
         this.init();
@@ -219,4 +219,4 @@ window.testAPI = async function() {
     }
 };
 
-console.log('💡 Vinkki: Testaa API kirjoittamalla konsoliin: testAPI()');
+console.log('testAPI ladattu selaimeen');
