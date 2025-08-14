@@ -1,74 +1,101 @@
-// Kävijälaskurin koodi
+// Kävijälaskuri Netlifyn kanssa
+// Kävijälaskuri Netlifyn kanssa - KORJATTU
 class VisitorTracker {
     constructor() {
-        this.sessionId = this.getSessionId();
-        this.apiUrl = '/api/visitors';
+        this.sessionId = this.getOrCreateSessionId();
+        // KORJATTU POLKU NETLIFYLLE
+        this.apiUrl = '/.netlify/functions/visitors';
+        this.retryCount = 0;
+        this.maxRetries = 3;
         this.init();
     }
     
-    getSessionId() {
-        let id = sessionStorage.getItem('sessionId');
+    getOrCreateSessionId() {
+        let id = localStorage.getItem('visitorSessionId');
         if (!id) {
-            id = 'session_' + Date.now() + '_' + Math.random().toString(36);
-            sessionStorage.setItem('sessionId', id);
+            id = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            localStorage.setItem('visitorSessionId', id);
+            console.log('Uusi kävijä, session ID:', id);
         }
         return id;
     }
     
     async init() {
-        console.log('Käynnistetään kävijälaskuri...');
+        console.log('Yhdistetään Netlify Functions...');
+        console.log('API URL:', this.apiUrl);
+        
+        // Ensimmäinen päivitys heti
         await this.updateStats();
         
         // Päivitä 30 sekunnin välein
-        setInterval(() => this.updateStats(), 30000);
+        this.interval = setInterval(() => this.updateStats(), 30000);
+        
+        // Päivitä kun käyttäjä palaa sivulle
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                this.updateStats();
+            }
+        });
     }
     
     async updateStats() {
         try {
+            console.log('Lähetetään pyyntö:', this.apiUrl);
+            
             const response = await fetch(this.apiUrl, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    sessionId: this.sessionId
+                    sessionId: this.sessionId,
+                    timestamp: new Date().toISOString()
                 })
             });
             
             if (!response.ok) {
-                throw new Error('API virhe');
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
             
             const data = await response.json();
-            console.log('Tilastot päivitetty:', data);
+            console.log('API vastaus:', data);
             
-            // Päivitä näyttö
+            if (data.success) {
+                console.log('✅ Tilastot päivitetty');
+                this.retryCount = 0;
+            } else if (data.demo) {
+                console.warn('⚠️ Demo-tila käytössä');
+            }
+            
             this.updateDisplay(data);
             
         } catch (error) {
-            console.error('Virhe tilastojen haussa:', error);
+            console.error('❌ Virhe:', error);
             this.useFallback();
         }
     }
     
     updateDisplay(data) {
+        // Päivitä navbarin laskurit
         const onlineEl = document.getElementById('visitorCount');
         if (onlineEl) {
-            onlineEl.textContent = data.online;
-            onlineEl.classList.add('updating');
-            setTimeout(() => onlineEl.classList.remove('updating'), 300);
+            onlineEl.textContent = data.online || '...';
         }
         
         const totalEl = document.getElementById('totalCount');
         if (totalEl) {
-            totalEl.textContent = this.formatNumber(data.total);
-            totalEl.classList.add('updating');
-            setTimeout(() => totalEl.classList.remove('updating'), 300);
+            totalEl.textContent = this.formatNumber(data.total || 0);
         }
         
-        // Jos demo-data, näytä indikaattori
-        if (data.demo) {
-            console.log('Käytetään demo-dataa (tietokanta ei yhteydessä)');
+        // Päivitä footer tilastot
+        if (document.getElementById('todayVisitors')) {
+            document.getElementById('todayVisitors').textContent = data.today || 0;
+        }
+        if (document.getElementById('weekVisitors')) {
+            document.getElementById('weekVisitors').textContent = this.formatNumber(data.week || 0);
+        }
+        if (document.getElementById('monthVisitors')) {
+            document.getElementById('monthVisitors').textContent = this.formatNumber(data.month || 0);
         }
     }
     
@@ -82,75 +109,117 @@ class VisitorTracker {
     }
     
     useFallback() {
-        // Käytä simulaatiota jos API ei toimi
-        const fallbackData = {
+        console.log('Käytetään fallback arvoja');
+        const fallback = {
             online: Math.floor(Math.random() * 20) + 5,
-            total: 45678 + Math.floor(Math.random() * 100),
+            total: 45678,
+            today: 127,
+            week: 892,
+            month: 3421,
             demo: true
         };
-        this.updateDisplay(fallbackData);
+        this.updateDisplay(fallback);
     }
 }
 
-// LISÄÄ PALUU-NAPPI AUTOMAATTISESTI KAIKKIIN OSIOIHIN
-document.addEventListener('DOMContentLoaded', function() {
-    // Hae kaikki osiot paitsi etusivu
-    const sections = document.querySelectorAll('.section:not(#etusivu)');
-    
+// NAVIGOINTI FUNKTIOT (säilytetty alkuperäiset)
+function showSection(sectionId) {
+    // Piilota kaikki osiot
+    const sections = document.querySelectorAll('.section');
     sections.forEach(section => {
-        // Luo paluu-nappi
-        const backButton = document.createElement('div');
-        backButton.className = 'back-to-home';
-        backButton.innerHTML = `
-            <button onclick="showSection('etusivu')" class="back-button">
-                <span class="back-arrow">←</span>
-                <span>Takaisin etusivulle</span>
-            </button>
-        `;
-        
-        // Lisää nappi osion alkuun (h2 otsikon jälkeen)
-        const heading = section.querySelector('h2');
-        if (heading) {
-            heading.insertAdjacentElement('afterend', backButton);
-        } else {
-            section.insertBefore(backButton, section.firstChild);
+        section.classList.remove('active');
+    });
+
+    // Näytä valittu osio
+    const targetSection = document.getElementById(sectionId);
+    if (targetSection) {
+        targetSection.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Piilota navbar muilla sivuilla
+    const navbar = document.querySelector('.nav-menu');
+    const navItems = navbar ? navbar.querySelectorAll('.nav-item') : [];
+    
+    if (sectionId === 'etusivu') {
+        navItems.forEach(item => {
+            item.style.display = 'block';
+        });
+    } else {
+        navItems.forEach((item, index) => {
+            if (index === 0) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    }
+}
+
+// DOM VALMIS
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🚀 Kotimme Tampere sivusto ladattu!');
+    
+    // Käynnistä kävijälaskuri
+    const tracker = new VisitorTracker();
+    
+    // Mobiilimenu
+    const mobileMenu = document.querySelector('.mobile-menu');
+    const navMenu = document.querySelector('.nav-menu');
+    const navItems = document.querySelectorAll('.nav-item');
+    const logo = document.querySelector('.logo');
+
+    if (mobileMenu) {
+        mobileMenu.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+    }
+
+    // Dropdown toiminnallisuus
+    navItems.forEach(item => {
+        const dropdown = item.querySelector('.dropdown');
+        const link = item.querySelector('.nav-link');
+        if (dropdown && link) {
+            link.addEventListener('click', (e) => {
+                if (window.innerWidth <= 768) {
+                    e.preventDefault();
+                    dropdown.classList.toggle('active');
+                }
+            });
         }
     });
-    
-    // Lisää myös kiinteä paluu-nappi
-    const fixedBackButton = document.createElement('div');
-    fixedBackButton.className = 'fixed-back-button';
-    fixedBackButton.id = 'fixedBackBtn';
-    fixedBackButton.innerHTML = `
-        <button onclick="showSection('etusivu')" title="Palaa etusivulle">
-            <span>🏠</span>
-        </button>
-    `;
-    fixedBackButton.style.display = 'none';
-    document.body.appendChild(fixedBackButton);
+
+    // Logo klikkaus
+    if (logo) {
+        logo.addEventListener('click', () => {
+            showSection('etusivu');
+            if (navMenu) navMenu.classList.remove('active');
+            document.querySelectorAll('.dropdown.active').forEach(dd => {
+                dd.classList.remove('active');
+            });
+        });
+    }
+
+    // Varmista että etusivu näkyy alussa
+    showSection('etusivu');
 });
 
-// Päivitä showSection funktio näyttämään/piilottamaan kiinteä nappi
-const originalShowSection = showSection;
-showSection = function(sectionId) {
-    originalShowSection(sectionId);
-    
-    // Näytä/piilota kiinteä paluu-nappi
-    const fixedBtn = document.getElementById('fixedBackBtn');
-    if (fixedBtn) {
-        if (sectionId === 'etusivu') {
-            fixedBtn.style.display = 'none';
-        } else {
-            fixedBtn.style.display = 'block';
-        }
+// Testifunktio konsolia varten
+window.testAPI = async function() {
+    console.log('🧪 Testataan Netlify Functions yhteyttä...');
+    try {
+        const response = await fetch('/.netlify/functions/visitors', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ sessionId: 'test-' + Date.now() })
+        });
+        const data = await response.json();
+        console.log('✅ API vastaus:', data);
+        return data;
+    } catch (error) {
+        console.error('❌ API virhe:', error);
+        return error;
     }
 };
 
-// Käynnistä kun DOM valmis
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-        new VisitorTracker();
-    });
-} else {
-    new VisitorTracker();
-}
+console.log('💡 Vinkki: Testaa API kirjoittamalla konsoliin: testAPI()');

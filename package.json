@@ -3,15 +3,17 @@
   "version": "1.0.0",
   "description": "Kotimme Tampere - Tampereen palvelut yhdessä paikassa",
   "scripts": {
-    "dev": "npx serve public -p 3000",
-    "start": "vercel dev",
-    "deploy": "vercel --prod"
+    "dev": "netlify dev",
+    "serve": "npx serve public -p 3000",
+    "build": "echo 'No build needed'",
+    "deploy": "netlify deploy --prod"
   },
   "dependencies": {
     "mongodb": "^5.0.0"
   },
   "devDependencies": {
-    "vercel": "^32.0.0",
+    "@netlify/functions": "^2.0.0",
+    "netlify-cli": "^17.0.0",
     "serve": "^14.0.0"
   }
 }
