@@ -6,7 +6,7 @@
     "dev": "netlify dev",
     "serve": "npx serve public -p 3000",
     "deploy": "netlify deploy --prod",
-    "build": "mkdir -p public && cp -r index.html styles.css public/"
+    "build": "mkdir -p public && cp -r src/index.html src/styles.css public/"
   },
   "dependencies": {
     "mongodb": "^5.0.0"
